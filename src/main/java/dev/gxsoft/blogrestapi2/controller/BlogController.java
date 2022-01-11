@@ -23,16 +23,32 @@ public class BlogController {
         return "Welcome to Ifeanyichukwu Otiwa Blog RESTAPI!";
     }
 
+    // -------------------------------------------------------------------------------------------------
+    //USER CRUD OPERATIONS
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
         var resp = userService.registerUser(user);
         return resp != null ? resp : "Error registering User";
     }
 
-
     @PostMapping("/login")
     public User loginUser(@RequestBody LoggedInUser user)  {
         return userService.loginUser(user.getEmail(), user.getPassword());
     }
+
+    @DeleteMapping("/{userId}")
+    public String deleteUser(@PathVariable long userId) {
+        var userT = userService.findUserById(userId);
+        return userService.deactivateUser(userT) ;
+    }
+
+    @PutMapping("/Update")
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
+
+    // -----------------------------------------------------------------------------
+    //POST CRUD OPERATIONS
+
 
 }

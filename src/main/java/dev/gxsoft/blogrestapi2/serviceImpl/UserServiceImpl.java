@@ -57,4 +57,29 @@ public class UserServiceImpl implements UserService {
             return "User does not exist";
         }
     }
+
+    public User findUserById(long id) {
+        var foundUser = userRepository.findById(id);
+
+        if (foundUser.isPresent()) {
+            logger.info("User Found");
+            return foundUser.get();
+        } else {
+            logger.error("User Not Found");
+            throw  new RuntimeException("No such ID");
+
+        }
+    }
+
+    @Override
+    public User updateUser(User user) {
+        long id = user.getUserId();
+        var temp = this.findUserById(id);
+        if (temp != null) {
+            return userRepository.save(user);
+        } else {
+            logger.info("User not found");
+            throw new RuntimeException("User Not found");
+        }
+    }
 }
