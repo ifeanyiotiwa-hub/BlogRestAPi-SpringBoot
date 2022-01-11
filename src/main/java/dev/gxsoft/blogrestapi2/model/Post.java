@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,17 +25,35 @@ public class Post {
 
     private String body;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
     @OneToMany
     private List<Comment> postComments;
 
+    public Post() {
+        this.postComments = new ArrayList<>();
+        this.modifiedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Post(long userId, String title, String body) {
+        this();
+        this.userId = userId;
+        this.title = title;
+        this.body = body;
+    }
 
     @Override
     public String toString() {
-        return "Post" + this.postId +": {" +
+        return this.postId + ": {" +
                 ", userId: " + userId +
                 ", title: " + title +
                 ", body: " + body +
+                ", createdAt: " + createdAt +
+                ", modifiedAt: " + modifiedAt +
                 ", postComments: " + postComments +
-                "}";
+                '}';
     }
 }
