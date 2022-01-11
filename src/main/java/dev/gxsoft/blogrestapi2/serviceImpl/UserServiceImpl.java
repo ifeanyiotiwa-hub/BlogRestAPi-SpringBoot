@@ -19,14 +19,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String loginUser(String email, String password) {
+    public User loginUser(String email, String password) {
         var loggedUser = userRepository.findUserByEmailAndPassword(email, password);
         if (loggedUser.isPresent()) {
             logger.info("User Found");
-            return loggedUser.get().toString();
+            return loggedUser.get();
         } else {
             logger.error("User Not Found");
-            return "";
+            throw new RuntimeException("User Not found");
         }
     }
 
