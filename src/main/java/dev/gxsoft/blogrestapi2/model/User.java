@@ -37,6 +37,8 @@ public class User {
     @ManyToMany
     private List<User> followers;
 
+    private boolean deactivated;
+
 
     @Override
     public String toString() {

@@ -1,0 +1,60 @@
+package dev.gxsoft.blogrestapi2.serviceImpl;
+
+import dev.gxsoft.blogrestapi2.model.User;
+import dev.gxsoft.blogrestapi2.repository.UserRepository;
+import dev.gxsoft.blogrestapi2.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class UserServiceImpl implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public String loginUser(String email, String password) {
+        var loggedUser = userRepository.findUserByEmailAndPassword(email, password);
+        if (loggedUser.isPresent()) {
+            logger.info("User Found");
+            return loggedUser.get().toString();
+        } else {
+            logger.error("User Not Found");
+            return "";
+        }
+    }
+
+    @Override
+    public String registerUser(User user) {
+        logger.info("registering User");
+        var savedUser = userRepository.save(user);
+        logger.info(String.valueOf(savedUser));
+        return "User registered";
+    }
+
+    @Override
+    public String deactivateUser(User user) {
+        var dUser = userRepository.findById(user.getUserId());
+        if (dUser.isPresent()) {
+            var tempUser = dUser.get();
+            if (tempUser.isDeactivated()) {
+                user.setDeactivated(true);
+                userRepository.save(user);
+                logger.info("User Saved");
+                return "User Saved";
+            } else {
+                logger.info("User has been Deactivated");
+                return "User has been Deactivated";
+            }
+        } else {
+            logger.info("User does not exist");
+            return "User does not exist";
+        }
+    }
+}
