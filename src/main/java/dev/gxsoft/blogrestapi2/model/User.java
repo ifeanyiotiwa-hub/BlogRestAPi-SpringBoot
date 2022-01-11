@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +25,7 @@ public class User {
     private String password;
 
     //Blog User Details
-    private LocalDate registeredDate;
+    private LocalDateTime registeredDate;
 
     @OneToMany
     private List<Comment> likedComments;
@@ -39,6 +41,22 @@ public class User {
 
     private boolean deactivated;
 
+    public User(String firstName, String lastName, String email, String password) {
+        this();
+        this.firstName = Objects.requireNonNull(firstName);
+        this.lastName = Objects.requireNonNull(lastName);
+        this.email = Objects.requireNonNull(email);
+        this.password = Objects.requireNonNull(password);
+    }
+
+    public User() {
+        this.registeredDate = LocalDateTime.now();
+        this.deactivated = false;
+        this.favouritePosts = new ArrayList<>();
+        this.followedUsers = new ArrayList<>();
+        this.likedComments = new ArrayList<>();
+        this.followers = new ArrayList<>();
+    }
 
     @Override
     public String toString() {

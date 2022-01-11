@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,14 +45,14 @@ public class UserServiceImpl implements UserService {
         var dUser = userRepository.findById(user.getUserId());
         if (dUser.isPresent()) {
             var tempUser = dUser.get();
-            if (tempUser.isDeactivated()) {
+            if (!tempUser.isDeactivated()) {
                 user.setDeactivated(true);
                 userRepository.save(user);
-                logger.info("User Saved");
+                logger.info("User Deactivated");
                 return "User Saved";
             } else {
-                logger.info("User has been Deactivated");
-                return "User has been Deactivated";
+                logger.info("User has already been Deactivated");
+                return "User has already been Deactivated";
             }
         } else {
             logger.info("User does not exist");
@@ -80,6 +82,20 @@ public class UserServiceImpl implements UserService {
         } else {
             logger.info("User not found");
             throw new RuntimeException("User Not found");
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteAllUsers() {
+        if (this.getAllUsers().isEmpty()) {
+            logger.info("User list is empty");
+        } else {
+            userRepository.deleteAll();
         }
     }
 }

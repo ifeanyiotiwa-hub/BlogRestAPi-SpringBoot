@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/blog/api")
 public class BlogController {
@@ -20,7 +22,13 @@ public class BlogController {
 
     @GetMapping("")
     public String indexPage() {
+        logger.info("List of User in DB");
         return "Welcome to Ifeanyichukwu Otiwa Blog RESTAPI!";
+    }
+
+    @GetMapping("/users")
+    public List<User> getUsers() {
+        return userService.getAllUsers();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -45,6 +53,12 @@ public class BlogController {
     @PutMapping("/Update")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
+    }
+
+    @DeleteMapping("/users")
+    public String clearUser() {
+        userService.deleteAllUsers();
+        return "Cleared";
     }
 
     // -----------------------------------------------------------------------------
