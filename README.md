@@ -9,7 +9,7 @@ and delete comment in post.
 ### To view All posts created by a certain user
 - RequestMethod: **GET**
 - RequestURL: http://localhost:8081/blog/api/{userId}/posts/
-
+---
 ###To add a user in the system
 RequestMethod: **POST**
 URL: http://localhost:8081/blogApplication/addUser
