@@ -53,13 +53,21 @@ public class PostServiceImpl implements PostService {
         Objects.requireNonNull(post);
         var user = userRepository.findById(post.getUserId());
         var newPost = postRepository.findById(post.getPostId());
+        logger.debug("newPost.toString");
         if (newPost.isPresent() && user.isPresent()){
+            var tPost = postRepository.findPostByPostIdAndUserId(newPost.get().getPostId(), user.get().getUserId());
             logger.info("Owner Of Post is updating Post");
-            postRepository.save(newPost.get());
-            return "Post Updated";
+            if (tPost.isPresent()) {
+                postRepository.save(tPost.get());
+                System.out.println("Updating post");
+                return "Post Updated";
+            } else {
+                return "Something went wrong";
+            }
+
         } else {
             logger.info("User not Authorized");
-            throw new RuntimeException("Action Not Allowed");
+            return "Action Not Authorized";
         }
     }
 
@@ -94,7 +102,7 @@ public class PostServiceImpl implements PostService {
     public List<Comment> getPostComments(long postId) {
         var post = postRepository.getById(postId);
         Objects.requireNonNull(post);
-        var postComments = commentRepository.findAllByPostIdAndUserId(postId, post.getUserId());
+        var postComments = commentRepository.findCommentsByPostIdAndUserId(postId, post.getUserId());
         return Objects.requireNonNull(postComments); //Todo
     }
 
