@@ -77,4 +77,4 @@ RequestURL: http://localhost:8081/blogApplication/posts/{id}
 
 ##UML DIAGRAMS
 
-[!UML](./BlogRestAPIUMLDiagram.puml)
+![UML](BlogRestAPIUMLDiagram.puml)
