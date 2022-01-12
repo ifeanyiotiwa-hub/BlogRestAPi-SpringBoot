@@ -100,7 +100,7 @@ public class BlogController {
         }
     }
 
-    @PutMapping("/{userId}/{postId}")
+    @PutMapping("/{userId}/{postId}/")
     public String updatePost(@PathVariable long userId, @PathVariable long postId, @RequestBody PostDTO postDTO) {
         var user = userService.findUserById(userId);
         var post = postService.getPost(postId);
