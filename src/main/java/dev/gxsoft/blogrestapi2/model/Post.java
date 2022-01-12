@@ -1,6 +1,7 @@
 package dev.gxsoft.blogrestapi2.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long postId;
 
-    @Column(name = "user_id")
     private long userId;
 
     private String title;
@@ -30,6 +30,7 @@ public class Post {
     private LocalDateTime modifiedAt;
 
     @OneToMany
+    @JsonBackReference
     private List<Comment> postComments;
 
     public Post() {

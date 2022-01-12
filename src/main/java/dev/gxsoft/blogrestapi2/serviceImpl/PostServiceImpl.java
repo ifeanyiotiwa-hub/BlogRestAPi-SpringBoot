@@ -118,4 +118,20 @@ public class PostServiceImpl implements PostService {
         }
         return "";
     }
+
+    @Override
+    public List<Post> getAllPostByUserId(long userId) {
+        var t = postRepository.findAllByUserId(userId);
+        return Objects.requireNonNull(t);
+    }
+
+    @Override
+    public Post getPostById(long postId) {
+        var t = postRepository.findById(postId);
+        if (t.isPresent()) {
+            return t.get();
+        } else {
+            throw new RuntimeException("Post Not found");
+        }
+    }
 }

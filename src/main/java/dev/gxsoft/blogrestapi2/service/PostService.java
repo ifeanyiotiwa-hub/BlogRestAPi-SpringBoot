@@ -16,4 +16,6 @@ public interface PostService {
     String deletePost(long postId);
     List<Comment> getPostComments(long postId);
     String commentOnPost(CommentDTO commentDTO, long userId);
+    List<Post> getAllPostByUserId(long userId);
+    Post getPostById(long postId);
 }

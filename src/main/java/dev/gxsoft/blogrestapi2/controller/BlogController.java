@@ -1,6 +1,7 @@
 package dev.gxsoft.blogrestapi2.controller;
 
 
+import dev.gxsoft.blogrestapi2.dto.CommentDTO;
 import dev.gxsoft.blogrestapi2.dto.LoggedInUser;
 import dev.gxsoft.blogrestapi2.dto.PostDTO;
 import dev.gxsoft.blogrestapi2.model.Comment;
@@ -81,6 +82,11 @@ public class BlogController {
         return postService.getAllPost();
     }
 
+    @GetMapping("/{userId}/posts")
+    public List<Post> getAllPostByUserId(@PathVariable long userId) {
+        return postService.getAllPostByUserId(userId);
+    }
+
     @PostMapping("/{userId}/post")
     public Post createPost(@PathVariable long userId, @RequestBody Post post) {
         var user = userService.findUserById(userId);
@@ -128,6 +134,21 @@ public class BlogController {
     @GetMapping("/{userId}/{postId}/comments")
     public List<Comment> getPostComments(@PathVariable long userId, @PathVariable long postId) {
         return commentService.getAllCommentsOfPost(postId, userId);
+    }
+
+    @PostMapping("/{userId}/post/comment")
+    public Comment createComment(@PathVariable long userId, @RequestBody CommentDTO comment) {
+        var post = postService.getPostById(comment.getPostId());
+
+        if (post.getUserId() == userId) {
+            Comment newComment = new Comment();
+            newComment.setPostId(comment.getPostId());
+            newComment.setUserId(userId);
+            newComment.setBody(comment.getBody());
+            return commentService.saveComment(newComment);
+        } else {
+            throw new RuntimeException("UserId not found");
+        }
     }
 
 }
