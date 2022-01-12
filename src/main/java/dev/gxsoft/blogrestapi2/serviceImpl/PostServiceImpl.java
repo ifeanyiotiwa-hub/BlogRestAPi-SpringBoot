@@ -1,8 +1,10 @@
 package dev.gxsoft.blogrestapi2.serviceImpl;
 
 
+import dev.gxsoft.blogrestapi2.dto.CommentDTO;
 import dev.gxsoft.blogrestapi2.model.Comment;
 import dev.gxsoft.blogrestapi2.model.Post;
+import dev.gxsoft.blogrestapi2.repository.CommentRepository;
 import dev.gxsoft.blogrestapi2.repository.PostRepository;
 import dev.gxsoft.blogrestapi2.repository.UserRepository;
 import dev.gxsoft.blogrestapi2.service.PostService;
@@ -19,10 +21,14 @@ public class PostServiceImpl implements PostService {
     private static  final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository,
+                           UserRepository userRepository,
+                           CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
 
@@ -85,17 +91,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Comment> getPostComments() {
-//        postRepository.;
-        return null; //Todo
+    public List<Comment> getPostComments(long postId) {
+        var post = postRepository.getById(postId);
+        Objects.requireNonNull(post);
+        var postComments = commentRepository.findAllByPostIdAndUserId(postId, post.getUserId());
+        return Objects.requireNonNull(postComments); //Todo
     }
 
     @Override
-    public String commentOnPost(long postId, Comment comment) {
-        var post = postRepository.findById(postId);
-        if (post.isPresent() && !comment.getBody().isEmpty()) {
-            comment.setPostId(postId);
-//            postRepository.
+    public String commentOnPost(CommentDTO commentDTO, long userId) {
+        var post = postRepository.findById(commentDTO.getPostId());
+        if (post.isPresent() && !commentDTO.getBody().isEmpty()) {
+            var com = new Comment();
+            com.setPostId(commentDTO.getPostId());
+            com.setBody(commentDTO.getBody());
+            com.setUserId(userId);
+            commentRepository.save(com);
         }
         return "";
     }

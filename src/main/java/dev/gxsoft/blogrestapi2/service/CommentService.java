@@ -8,7 +8,7 @@ import java.util.List;
 public interface CommentService {
 
     Comment saveComment(Comment comment);
-    Comment updateComment(CommentDTO commentDTO);
+    Comment updateComment(CommentDTO commentDTO, long commentId);
     Comment getCommentById(long commentId);
     List<Comment> getAllCommentsOfPost(long postId, long userId);
 }

@@ -6,6 +6,6 @@ import lombok.*;
 @Data
 @RequiredArgsConstructor
 public class CommentDTO {
-    private long commentId;
+    private long postId;
     private String body;
 }

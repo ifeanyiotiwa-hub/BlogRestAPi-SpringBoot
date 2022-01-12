@@ -46,8 +46,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(CommentDTO commentDTO) {
-        var comment = commentRepository.findById(commentDTO.getCommentId());
+    public Comment updateComment(CommentDTO commentDTO, long commentId) {
+        var comment = commentRepository.findById(commentId);
         if (comment.isPresent()) {
             logger.info("Comment Exists");
             var com = comment.get();
