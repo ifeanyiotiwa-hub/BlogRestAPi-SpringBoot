@@ -21,7 +21,19 @@ public class Comment {
 
     private String body;
 
-    
+    public Comment(long commentId, long postId, long userId, String body) {
+        this.commentId = commentId;
+        this.postId = postId;
+        this.userId = userId;
+        this.body = body;
+    }
+
+    public Comment(String body) {
+        this.body = body;
+    }
+
+    public Comment() {
+    }
 
     @Override
     public String toString() {
