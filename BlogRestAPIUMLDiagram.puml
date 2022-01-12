@@ -1,0 +1,163 @@
+@startuml
+class dev.gxsoft.blogrestapi2.dto.CommentDTO {
+- long postId
+- String body
+}
+interface dev.gxsoft.blogrestapi2.service.PostService {
+~ Post savePost(Post)
+~ String updatePost(Post)
+~ Post getPost(long)
+~ List<Post> getAllPost()
+~ String deletePost(long)
+~ List<Comment> getPostComments(long)
+~ String commentOnPost(CommentDTO,long)
+~ List<Post> getAllPostByUserId(long)
+~ Post getPostById(long)
+}
+interface dev.gxsoft.blogrestapi2.repository.UserRepository {
+~ Optional<User> findUserByEmailAndPassword(String,String)
+}
+class dev.gxsoft.blogrestapi2.controller.BlogController {
++ String indexPage()
++ List<User> getUsers()
++ String registerUser(User)
++ User loginUser(LoggedInUser)
++ String deleteUser(long)
++ User updateUser(User)
++ String clearUser()
++ List<Post> getAllPost()
++ List<Post> getAllPostByUserId(long)
++ Post createPost(long,Post)
++ String updatePost(long,long,PostDTO)
++ void deletePost(long,long)
++ List<Comment> getPostComments(long,long)
++ Comment createComment(long,CommentDTO)
+}
+class dev.gxsoft.blogrestapi2.model.Comment {
+- long commentId
+- long postId
+- long userId
+- String body
++ String toString()
+}
+interface dev.gxsoft.blogrestapi2.service.CommentService {
+~ Comment saveComment(Comment)
+~ Comment updateComment(CommentDTO,long)
+~ Comment getCommentById(long)
+~ List<Comment> getAllCommentsOfPost(long,long)
+}
+class dev.gxsoft.blogrestapi2.dto.PostDTO {
+- String title
+- String body
+}
+class dev.gxsoft.blogrestapi2.serviceImpl.CommentServiceImpl {
+- CommentRepository commentRepository
+- PostRepository postRepository
+- UserRepository userRepository
+- {static} Logger logger
++ Comment saveComment(Comment)
++ Comment updateComment(CommentDTO,long)
++ Comment getCommentById(long)
++ List<Comment> getAllCommentsOfPost(long,long)
+}
+class dev.gxsoft.blogrestapi2.controller.BlogControllerTest {
+- BlogController blogController
+- CommentService commentService
+- PostService postService
+- UserService userService
+~ void testRegisterUser()
+~ void testLoginUser()
+~ void testUpdateUser()
+~ void testGetAllPost()
+~ void testClearUser()
+~ void testCreatePost()
+~ void testCreatePost2()
+~ void testCreatePost3()
+~ void testUpdatePost()
+~ void testUpdatePost2()
+~ void testDeletePost()
+~ void testDeletePost2()
+~ void testDeleteUser()
+~ void testGetPostComments()
+~ void testGetUsers()
+~ void testIndexPage()
+~ void testIndexPage2()
+}
+interface dev.gxsoft.blogrestapi2.service.UserService {
+~ User loginUser(String,String)
+~ String registerUser(User)
+~ String deactivateUser(User)
+~ User findUserById(long)
+~ User updateUser(User)
+~ List<User> getAllUsers()
+~ void deleteAllUsers()
+}
+class dev.gxsoft.blogrestapi2.BlogRestApi2Application {
++ {static} void main(String[])
+}
+class dev.gxsoft.blogrestapi2.serviceImpl.PostServiceImpl {
++ Post savePost(Post)
++ String updatePost(Post)
++ Post getPost(long)
++ List<Post> getAllPost()
++ String deletePost(long)
++ List<Comment> getPostComments(long)
++ String commentOnPost(CommentDTO,long)
++ List<Post> getAllPostByUserId(long)
++ Post getPostById(long)
+}
+class dev.gxsoft.blogrestapi2.model.Post {
+- long postId
+- long userId
+- String title
+- String body
+- LocalDateTime createdAt
+- LocalDateTime modifiedAt
+- List<Comment> postComments
++ String toString()
+}
+interface dev.gxsoft.blogrestapi2.repository.CommentRepository {
+~ List<Comment> findCommentsByPostIdAndUserId(long,long)
+}
+class dev.gxsoft.blogrestapi2.model.User {
+- long userId
+- String firstName
+- String lastName
+- String email
+- String password
+- LocalDateTime registeredDate
+- List<Comment> likedComments
+- List<Post> favouritePosts
+- List<User> followedUsers
+- List<User> followers
+- boolean deactivated
++ String toString()
+}
+class dev.gxsoft.blogrestapi2.BlogRestApi2ApplicationTests {
+~ void contextLoads()
+}
+class dev.gxsoft.blogrestapi2.serviceImpl.UserServiceImpl {
++ User loginUser(String,String)
++ String registerUser(User)
++ String deactivateUser(User)
++ User findUserById(long)
++ User updateUser(User)
++ List<User> getAllUsers()
++ void deleteAllUsers()
+}
+class dev.gxsoft.blogrestapi2.dto.LoggedInUser {
+~ String email
+~ String password
+}
+interface dev.gxsoft.blogrestapi2.repository.PostRepository {
+~ Optional<Post> findPostByPostIdAndUserId(long,long)
+~ List<Post> findAllByUserId(long)
+}
+
+org.springframework.data.jpa.repository.JpaRepository <|-- dev.gxsoft.blogrestapi2.repository.UserRepository
+dev.gxsoft.blogrestapi2.service.CommentService <|.. dev.gxsoft.blogrestapi2.serviceImpl.CommentServiceImpl
+dev.gxsoft.blogrestapi2.service.PostService <|.. dev.gxsoft.blogrestapi2.serviceImpl.PostServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- dev.gxsoft.blogrestapi2.repository.CommentRepository
+dev.gxsoft.blogrestapi2.service.UserService <|.. dev.gxsoft.blogrestapi2.serviceImpl.UserServiceImpl
+org.springframework.data.jpa.repository.JpaRepository <|-- dev.gxsoft.blogrestapi2.repository.PostRepository
+@enduml

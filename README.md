@@ -73,3 +73,8 @@ Request Body :
 ## To delete a post
 RequestMethod: **DELETE**
 RequestURL: http://localhost:8081/blogApplication/posts/{id}
+
+
+##UML DIAGRAMS
+
+[!UML](./BlogRestAPIUMLDiagram.puml)
