@@ -44,6 +44,11 @@ public class BlogController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/users/{userId}")
+    public User getUserById(@PathVariable long userId) {
+        return userService.findUserById(userId);
+    }
+
     // -------------------------------------------------------------------------------------------------
     //USER CRUD OPERATIONS
     @PostMapping("/register")
@@ -129,22 +134,26 @@ public class BlogController {
     }
 
     //======================================================================================================
-    //COMMENTS CRUDE
+    //COMMENTS CRUD
 
     @GetMapping("/{userId}/{postId}/comments")
     public List<Comment> getPostComments(@PathVariable long userId, @PathVariable long postId) {
         return commentService.getAllCommentsOfPost(postId, userId);
     }
 
-    @PostMapping("/{userId}/post/comment")
+    @PostMapping("/{userId}/comment") // userID is Id of the commenting user
     public Comment createComment(@PathVariable long userId, @RequestBody CommentDTO comment) {
         var post = postService.getPostById(comment.getPostId());
+        var user = userService.findUserById(userId);
+        var owner = userService.findUserById(post.getUserId());
 
-        if (post.getUserId() == userId) {
+        if (user != null && owner != null) {
             Comment newComment = new Comment();
             newComment.setPostId(comment.getPostId());
             newComment.setUserId(userId);
             newComment.setBody(comment.getBody());
+            post.postComments.add(newComment);
+            postService.savePost(post);
             return commentService.saveComment(newComment);
         } else {
             throw new RuntimeException("UserId not found");

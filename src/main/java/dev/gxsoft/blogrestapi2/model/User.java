@@ -27,14 +27,17 @@ public class User {
     //Blog User Details
     private LocalDateTime registeredDate;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> likedComments;
-
-    @OneToMany
-    private List<Post> favouritePosts;
 
     @ManyToMany
     private List<User> followedUsers;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    public List<Post> posts;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    public List<Comment> comments;
 
     @ManyToMany
     private List<User> followers;
@@ -56,6 +59,7 @@ public class User {
         this.followedUsers = new ArrayList<>();
         this.likedComments = new ArrayList<>();
         this.followers = new ArrayList<>();
+        this.posts = new ArrayList<>();
     }
 
     @Override
@@ -66,6 +70,7 @@ public class User {
                 ", LastName: " + lastName +
                 ", email: " + email +
                 ", password: " + password +
+                ", posts: " + posts +
                 ", registeredDate: " + registeredDate +
                 ", likedComments: " + likedComments +
                 ", favouritePosts: " + favouritePosts +

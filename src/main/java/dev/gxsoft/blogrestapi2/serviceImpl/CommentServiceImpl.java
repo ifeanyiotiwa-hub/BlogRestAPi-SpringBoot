@@ -3,9 +3,9 @@ package dev.gxsoft.blogrestapi2.serviceImpl;
 import dev.gxsoft.blogrestapi2.dto.CommentDTO;
 import dev.gxsoft.blogrestapi2.model.Comment;
 import dev.gxsoft.blogrestapi2.repository.CommentRepository;
-import dev.gxsoft.blogrestapi2.repository.PostRepository;
-import dev.gxsoft.blogrestapi2.repository.UserRepository;
 import dev.gxsoft.blogrestapi2.service.CommentService;
+import dev.gxsoft.blogrestapi2.service.PostService;
+import dev.gxsoft.blogrestapi2.service.UserService;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -18,16 +18,16 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final PostService postService;
+    private final UserService userService;
     private static final Logger logger = getLogger(CommentServiceImpl.class);
 
     public CommentServiceImpl(CommentRepository commentRepository,
-                              PostRepository postRepository,
-                              UserRepository userRepository) {
+                              PostService postRepository,
+                              UserService userService) {
         this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
+        this.postService = postRepository;
+        this.userService = userService;
         logger.info("commentRepo Dependency Injected");
     }
 
@@ -36,13 +36,17 @@ public class CommentServiceImpl implements CommentService {
     public Comment saveComment(Comment comment) {
         var postId = comment.getPostId();
         var userId = comment.getUserId();
-        var post = postRepository.findById(postId);
-        var user = userRepository.findById(userId);
+        var post = postService.getPost(postId);
+        var user = userService.findUserById(userId);
 
-        if (post.isPresent() && user.isPresent() && comment.getBody().length() > 0) {
+        if (comment.getBody().length() > 0) {
+            post.postComments.add(comment);
+            postService.savePost(post);
             commentRepository.save(comment);
+            return comment;
+        } else {
+            throw new IllegalStateException("Something went wrong");
         }
-        return comment;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
             logger.info("Comment Exists");
             var com = comment.get();
             com.setBody(commentDTO.getBody());
-            return commentRepository.save(com);
+            return this.saveComment(com);
         } else {
             logger.info("Comment ID Not found");
             throw new RuntimeException("No such Comment ID exist");
@@ -73,6 +77,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getAllCommentsOfPost(long postId, long userId) {
         return commentRepository.findCommentsByPostIdAndUserId(postId, userId);
+    }
+
+    public void deleteComment(long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }
 

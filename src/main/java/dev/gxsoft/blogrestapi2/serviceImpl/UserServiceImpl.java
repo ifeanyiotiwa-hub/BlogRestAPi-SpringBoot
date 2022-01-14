@@ -5,6 +5,7 @@ import dev.gxsoft.blogrestapi2.repository.UserRepository;
 import dev.gxsoft.blogrestapi2.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -91,6 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Scheduled(fixedRate = 6000000000000000000L)
     public void deleteAllUsers() {
         if (this.getAllUsers().isEmpty()) {
             logger.info("User list is empty");

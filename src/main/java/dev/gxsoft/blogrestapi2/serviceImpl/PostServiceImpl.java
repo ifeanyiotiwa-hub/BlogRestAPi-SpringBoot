@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +40,10 @@ public class PostServiceImpl implements PostService {
         var user = userRepository.findById(post.getUserId());
         if (user.isPresent()) {
             logger.info("Registered User is creating a Post");
+            var tempUser = user.get();
+            tempUser.posts.add(post);
             postRepository.save(post);
+            userRepository.save(tempUser);
             return post;
         } else {
             logger.info("Kindly Register to Create a Post");

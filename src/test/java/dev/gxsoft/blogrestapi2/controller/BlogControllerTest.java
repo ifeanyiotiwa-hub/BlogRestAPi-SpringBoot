@@ -11,8 +11,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.gxsoft.blogrestapi2.dto.CommentDTO;
 import dev.gxsoft.blogrestapi2.dto.LoggedInUser;
 import dev.gxsoft.blogrestapi2.dto.PostDTO;
+import dev.gxsoft.blogrestapi2.model.Comment;
 import dev.gxsoft.blogrestapi2.model.Post;
 import dev.gxsoft.blogrestapi2.model.User;
 import dev.gxsoft.blogrestapi2.repository.CommentRepository;
@@ -70,6 +72,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(null);
         user.setUserId(123L);
         String content = (new ObjectMapper()).writeValueAsString(user);
@@ -96,6 +99,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         when(this.userService.loginUser((String) any(), (String) any())).thenReturn(user);
@@ -115,8 +119,8 @@ class BlogControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
                                 "{\"userId\":123,\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"email\":\"jane.doe@example.org\",\"password\":\"iloveyou"
-                                        + "\",\"registeredDate\":[1,1,1,1,1],\"likedComments\":[],\"favouritePosts\":[],\"followedUsers\":[],\"followers\""
-                                        + ":[],\"deactivated\":true}"));
+                                        + "\",\"registeredDate\":[1,1,1,1,1],\"likedComments\":[],\"favouritePosts\":[],\"followedUsers\":[],\"posts\":[],"
+                                        + "\"followers\":[],\"deactivated\":true}"));
     }
 
     @Test
@@ -131,6 +135,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         when(this.userService.updateUser((User) any())).thenReturn(user);
@@ -145,6 +150,7 @@ class BlogControllerTest {
         user1.setLastName("Doe");
         user1.setLikedComments(new ArrayList<>());
         user1.setPassword("iloveyou");
+        user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(null);
         user1.setUserId(123L);
         String content = (new ObjectMapper()).writeValueAsString(user1);
@@ -159,14 +165,26 @@ class BlogControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
                                 "{\"userId\":123,\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"email\":\"jane.doe@example.org\",\"password\":\"iloveyou"
-                                        + "\",\"registeredDate\":[1,1,1,1,1],\"likedComments\":[],\"favouritePosts\":[],\"followedUsers\":[],\"followers\""
-                                        + ":[],\"deactivated\":true}"));
+                                        + "\",\"registeredDate\":[1,1,1,1,1],\"likedComments\":[],\"favouritePosts\":[],\"followedUsers\":[],\"posts\":[],"
+                                        + "\"followers\":[],\"deactivated\":true}"));
     }
 
     @Test
     void testGetAllPost() throws Exception {
         when(this.postService.getAllPost()).thenReturn(new ArrayList<>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/blog/api/posts");
+        MockMvcBuilders.standaloneSetup(this.blogController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
+    }
+
+    @Test
+    void testGetAllPostByUserId() throws Exception {
+        when(this.postService.getAllPostByUserId(anyLong())).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/blog/api/{userId}/posts", 123L);
         MockMvcBuilders.standaloneSetup(this.blogController)
                 .build()
                 .perform(requestBuilder)
@@ -199,6 +217,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         UserRepository userRepository = mock(UserRepository.class);
@@ -226,14 +245,35 @@ class BlogControllerTest {
         user1.setLastName("Doe");
         user1.setLikedComments(new ArrayList<>());
         user1.setPassword("iloveyou");
+        user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user1.setUserId(123L);
+        Optional<User> ofResult = Optional.of(user1);
+
+        User user2 = new User();
+        user2.setDeactivated(true);
+        user2.setEmail("jane.doe@example.org");
+        user2.setFavouritePosts(new ArrayList<>());
+        user2.setFirstName("Jane");
+        user2.setFollowedUsers(new ArrayList<>());
+        user2.setFollowers(new ArrayList<>());
+        user2.setLastName("Doe");
+        user2.setLikedComments(new ArrayList<>());
+        user2.setPassword("iloveyou");
+        user2.setPosts(new ArrayList<>());
+        user2.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        user2.setUserId(123L);
         UserRepository userRepository1 = mock(UserRepository.class);
-        when(userRepository1.findById((Long) any())).thenReturn(Optional.of(user1));
+        when(userRepository1.save((User) any())).thenReturn(user2);
+        when(userRepository1.findById((Long) any())).thenReturn(ofResult);
         PostServiceImpl postService = new PostServiceImpl(postRepository, userRepository1, mock(CommentRepository.class));
 
+        CommentRepository commentRepository = mock(CommentRepository.class);
+        PostServiceImpl postRepository1 = new PostServiceImpl(mock(PostRepository.class), mock(UserRepository.class),
+                mock(CommentRepository.class));
+
         BlogController blogController = new BlogController(userService, postService,
-                new CommentServiceImpl(mock(CommentRepository.class), mock(PostRepository.class), mock(UserRepository.class)));
+                new CommentServiceImpl(commentRepository, postRepository1, new UserServiceImpl(mock(UserRepository.class))));
 
         Post post1 = new Post();
         post1.setBody("Not all who wander are lost");
@@ -249,6 +289,7 @@ class BlogControllerTest {
         verify(userRepository).findById((Long) any());
         verify(postRepository).save((Post) any());
         verify(userRepository1).findById((Long) any());
+        verify(userRepository1).save((User) any());
         assertTrue(blogController.getAllPost().isEmpty());
         assertTrue(blogController.getUsers().isEmpty());
     }
@@ -265,6 +306,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         UserRepository userRepository = mock(UserRepository.class);
@@ -281,8 +323,12 @@ class BlogControllerTest {
         post.setUserId(123L);
         PostService postService = mock(PostService.class);
         when(postService.savePost((Post) any())).thenReturn(post);
+        CommentRepository commentRepository = mock(CommentRepository.class);
+        PostServiceImpl postRepository = new PostServiceImpl(mock(PostRepository.class), mock(UserRepository.class),
+                mock(CommentRepository.class));
+
         BlogController blogController = new BlogController(userService, postService,
-                new CommentServiceImpl(mock(CommentRepository.class), mock(PostRepository.class), mock(UserRepository.class)));
+                new CommentServiceImpl(commentRepository, postRepository, new UserServiceImpl(mock(UserRepository.class))));
 
         Post post1 = new Post();
         post1.setBody("Not all who wander are lost");
@@ -325,6 +371,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         UserRepository userRepository = mock(UserRepository.class);
@@ -341,8 +388,12 @@ class BlogControllerTest {
         post1.setUserId(123L);
         PostService postService = mock(PostService.class);
         when(postService.savePost((Post) any())).thenReturn(post1);
+        CommentRepository commentRepository = mock(CommentRepository.class);
+        PostServiceImpl postRepository = new PostServiceImpl(mock(PostRepository.class), mock(UserRepository.class),
+                mock(CommentRepository.class));
+
         BlogController blogController = new BlogController(userService, postService,
-                new CommentServiceImpl(mock(CommentRepository.class), mock(PostRepository.class), mock(UserRepository.class)));
+                new CommentServiceImpl(commentRepository, postRepository, new UserServiceImpl(mock(UserRepository.class))));
 
         Post post2 = new Post();
         post2.setBody("Not all who wander are lost");
@@ -372,6 +423,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         when(this.userService.findUserById(anyLong())).thenReturn(user);
@@ -391,7 +443,8 @@ class BlogControllerTest {
         postDTO.setBody("Not all who wander are lost");
         postDTO.setTitle("Dr");
         String content = (new ObjectMapper()).writeValueAsString(postDTO);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/blog/api/{userId}/{postId}", 123L, 123L)
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/blog/api/{userId}/{postId}/", 123L, 123L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvcBuilders.standaloneSetup(this.blogController)
@@ -414,6 +467,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(0L);
         when(this.userService.findUserById(anyLong())).thenReturn(user);
@@ -433,7 +487,8 @@ class BlogControllerTest {
         postDTO.setBody("Not all who wander are lost");
         postDTO.setTitle("Dr");
         String content = (new ObjectMapper()).writeValueAsString(postDTO);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/blog/api/{userId}/{postId}", 123L, 123L)
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/blog/api/{userId}/{postId}/", 123L, 123L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvcBuilders.standaloneSetup(this.blogController)
@@ -456,6 +511,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         when(this.userService.findUserById(anyLong())).thenReturn(user);
@@ -490,6 +546,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(0L);
         when(this.userService.findUserById(anyLong())).thenReturn(user);
@@ -513,6 +570,41 @@ class BlogControllerTest {
     }
 
     @Test
+    void testCreateComment() throws Exception {
+        Post post = new Post();
+        post.setBody("Not all who wander are lost");
+        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setPostComments(new ArrayList<>());
+        post.setPostId(123L);
+        post.setTitle("Dr");
+        post.setUserId(123L);
+        when(this.postService.getPostById(anyLong())).thenReturn(post);
+
+        Comment comment = new Comment();
+        comment.setBody("Not all who wander are lost");
+        comment.setCommentId(123L);
+        comment.setPostId(123L);
+        comment.setUserId(123L);
+        when(this.commentService.saveComment((Comment) any())).thenReturn(comment);
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("Not all who wander are lost");
+        commentDTO.setPostId(123L);
+        String content = (new ObjectMapper()).writeValueAsString(commentDTO);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/blog/api/{userId}/post/comment", 123L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(this.blogController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("{\"commentId\":123,\"postId\":123,\"userId\":123,\"body\":\"Not all who wander are lost\"}"));
+    }
+
+    @Test
     void testDeleteUser() throws Exception {
         User user = new User();
         user.setDeactivated(true);
@@ -524,6 +616,7 @@ class BlogControllerTest {
         user.setLastName("Doe");
         user.setLikedComments(new ArrayList<>());
         user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
         user.setUserId(123L);
         when(this.userService.deactivateUser((User) any())).thenReturn("Deactivate User");
@@ -548,6 +641,35 @@ class BlogControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
+    }
+
+    @Test
+    void testGetUserById() throws Exception {
+        User user = new User();
+        user.setDeactivated(true);
+        user.setEmail("jane.doe@example.org");
+        user.setFavouritePosts(new ArrayList<>());
+        user.setFirstName("Jane");
+        user.setFollowedUsers(new ArrayList<>());
+        user.setFollowers(new ArrayList<>());
+        user.setLastName("Doe");
+        user.setLikedComments(new ArrayList<>());
+        user.setPassword("iloveyou");
+        user.setPosts(new ArrayList<>());
+        user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
+        user.setUserId(123L);
+        when(this.userService.findUserById(anyLong())).thenReturn(user);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/blog/api/users/{userId}", 123L);
+        MockMvcBuilders.standaloneSetup(this.blogController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"userId\":123,\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"email\":\"jane.doe@example.org\",\"password\":\"iloveyou"
+                                        + "\",\"registeredDate\":[1,1,1,1,1],\"likedComments\":[],\"favouritePosts\":[],\"followedUsers\":[],\"posts\":[],"
+                                        + "\"followers\":[],\"deactivated\":true}"));
     }
 
     @Test
