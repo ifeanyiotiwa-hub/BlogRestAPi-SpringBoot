@@ -34,19 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment saveComment(Comment comment) {
-        var postId = comment.getPostId();
-        var userId = comment.getUserId();
-        var post = postService.getPost(postId);
-        var user = userService.findUserById(userId);
-
-        if (comment.getBody().length() > 0) {
-            post.postComments.add(comment);
-            postService.savePost(post);
-            commentRepository.save(comment);
-            return comment;
-        } else {
-            throw new IllegalStateException("Something went wrong");
-        }
+        return commentRepository.save(comment);
     }
 
     @Override

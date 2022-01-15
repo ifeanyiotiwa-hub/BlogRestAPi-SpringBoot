@@ -49,14 +49,12 @@ class PostServiceImplTest {
     @Test
     void testSavePost() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -64,14 +62,12 @@ class PostServiceImplTest {
         Optional<User> ofResult = Optional.of(user);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -107,14 +103,12 @@ class PostServiceImplTest {
     @Test
     void testSavePost2() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -150,14 +144,12 @@ class PostServiceImplTest {
     @Test
     void testSavePost3() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -190,14 +182,12 @@ class PostServiceImplTest {
     @Test
     void testUpdatePost() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -256,14 +246,12 @@ class PostServiceImplTest {
     @Test
     void testUpdatePost2() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -362,14 +350,12 @@ class PostServiceImplTest {
     @Test
     void testUpdatePost4() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -588,6 +574,104 @@ class PostServiceImplTest {
 
     @Test
     void testCommentOnPost4() {
+        Post post = new Post();
+        post.setBody("Not all who wander are lost");
+        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setPostComments(new ArrayList<>());
+        post.setPostId(123L);
+        post.setTitle("Dr");
+        post.setUserId(123L);
+        Optional<Post> ofResult = Optional.of(post);
+        when(this.postRepository.findById((Long) any())).thenReturn(ofResult);
+
+        Comment comment = new Comment();
+        comment.setBody("Not all who wander are lost");
+        comment.setCommentId(123L);
+        comment.setPostId(123L);
+        comment.setUserId(123L);
+        when(this.commentRepository.save((Comment) any())).thenReturn(comment);
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("");
+        commentDTO.setPostId(123L);
+        assertEquals("", this.postServiceImpl.commentOnPost(commentDTO, 123L));
+        verify(this.postRepository).findById((Long) any());
+        assertTrue(this.postServiceImpl.getAllPost().isEmpty());
+    }
+
+    @Test
+    void testCommentOnPost5() {
+        Post post = new Post();
+        post.setBody("Not all who wander are lost");
+        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setPostComments(new ArrayList<>());
+        post.setPostId(123L);
+        post.setTitle("Dr");
+        post.setUserId(123L);
+        Optional<Post> ofResult = Optional.of(post);
+        when(this.postRepository.findById((Long) any())).thenReturn(ofResult);
+
+        Comment comment = new Comment();
+        comment.setBody("Not all who wander are lost");
+        comment.setCommentId(123L);
+        comment.setPostId(123L);
+        comment.setUserId(123L);
+        when(this.commentRepository.save((Comment) any())).thenReturn(comment);
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("Not all who wander are lost");
+        commentDTO.setPostId(123L);
+        assertEquals("", this.postServiceImpl.commentOnPost(commentDTO, 123L));
+        verify(this.postRepository).findById((Long) any());
+        verify(this.commentRepository).save((Comment) any());
+        assertTrue(this.postServiceImpl.getAllPost().isEmpty());
+    }
+
+    @Test
+    void testCommentOnPost6() {
+        Post post = new Post();
+        post.setBody("Not all who wander are lost");
+        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        post.setPostComments(new ArrayList<>());
+        post.setPostId(123L);
+        post.setTitle("Dr");
+        post.setUserId(123L);
+        Optional<Post> ofResult = Optional.of(post);
+        when(this.postRepository.findById((Long) any())).thenReturn(ofResult);
+        when(this.commentRepository.save((Comment) any())).thenThrow(new RuntimeException("An error occurred"));
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("Not all who wander are lost");
+        commentDTO.setPostId(123L);
+        assertThrows(RuntimeException.class, () -> this.postServiceImpl.commentOnPost(commentDTO, 123L));
+        verify(this.postRepository).findById((Long) any());
+        verify(this.commentRepository).save((Comment) any());
+    }
+
+    @Test
+    void testCommentOnPost7() {
+        when(this.postRepository.findById((Long) any())).thenReturn(Optional.empty());
+
+        Comment comment = new Comment();
+        comment.setBody("Not all who wander are lost");
+        comment.setCommentId(123L);
+        comment.setPostId(123L);
+        comment.setUserId(123L);
+        when(this.commentRepository.save((Comment) any())).thenReturn(comment);
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("Not all who wander are lost");
+        commentDTO.setPostId(123L);
+        assertEquals("", this.postServiceImpl.commentOnPost(commentDTO, 123L));
+        verify(this.postRepository).findById((Long) any());
+        assertTrue(this.postServiceImpl.getAllPost().isEmpty());
+    }
+
+    @Test
+    void testCommentOnPost8() {
         Post post = new Post();
         post.setBody("Not all who wander are lost");
         post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));

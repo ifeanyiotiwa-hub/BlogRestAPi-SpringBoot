@@ -3,7 +3,6 @@ package dev.gxsoft.blogrestapi2.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +27,13 @@ public class User {
     private LocalDateTime registeredDate;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> likedComments;
-
-    @ManyToMany
-    private List<User> followedUsers;
+    private List<Comment> likedPosts;
 
     @OneToMany(cascade = CascadeType.ALL)
     public List<Post> posts;
 
     @OneToMany(cascade = CascadeType.ALL)
     public List<Comment> comments;
-
-    @ManyToMany
-    private List<User> followers;
 
     private boolean deactivated;
 
@@ -55,10 +48,7 @@ public class User {
     public User() {
         this.registeredDate = LocalDateTime.now();
         this.deactivated = false;
-        this.favouritePosts = new ArrayList<>();
-        this.followedUsers = new ArrayList<>();
-        this.likedComments = new ArrayList<>();
-        this.followers = new ArrayList<>();
+        this.likedPosts = new ArrayList<>();
         this.posts = new ArrayList<>();
     }
 
@@ -72,10 +62,7 @@ public class User {
                 ", password: " + password +
                 ", posts: " + posts +
                 ", registeredDate: " + registeredDate +
-                ", likedComments: " + likedComments +
-                ", favouritePosts: " + favouritePosts +
-                ", followedUsers: " + followedUsers +
-                ", followers: " + followers +
+                ", likedComments: " + likedPosts +
                 "}";
     }
 }

@@ -3,13 +3,14 @@ package dev.gxsoft.blogrestapi2.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
 @Table(name = "comments")
 @Setter
 @Getter
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,7 @@ public class Comment {
 
     private long postId;
 
-    private long userId;
+    private long userId;  //id of user who created comment
 
     private String body;
 

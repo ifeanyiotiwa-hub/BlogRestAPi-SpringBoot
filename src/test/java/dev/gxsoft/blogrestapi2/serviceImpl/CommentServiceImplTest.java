@@ -1,6 +1,5 @@
 package dev.gxsoft.blogrestapi2.serviceImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,7 +10,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import dev.gxsoft.blogrestapi2.dto.CommentDTO;
 import dev.gxsoft.blogrestapi2.model.Comment;
 import dev.gxsoft.blogrestapi2.model.Post;
 import dev.gxsoft.blogrestapi2.model.User;
@@ -50,14 +48,12 @@ class CommentServiceImplTest {
     @Test
     void testSaveComment() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -106,14 +102,12 @@ class CommentServiceImplTest {
     @Test
     void testSaveComment2() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -139,139 +133,17 @@ class CommentServiceImplTest {
         post1.setUserId(123L);
         when(this.postService.savePost((Post) any())).thenReturn(post1);
         when(this.postService.getPost(anyLong())).thenReturn(post);
-        when(this.commentRepository.save((Comment) any())).thenThrow(new RuntimeException("An error occurred"));
+        when(this.commentRepository.save((Comment) any())).thenThrow(new IllegalStateException("foo"));
 
         Comment comment = new Comment();
         comment.setBody("Not all who wander are lost");
         comment.setCommentId(123L);
         comment.setPostId(123L);
         comment.setUserId(123L);
-        assertThrows(RuntimeException.class, () -> this.commentServiceImpl.saveComment(comment));
+        assertThrows(IllegalStateException.class, () -> this.commentServiceImpl.saveComment(comment));
         verify(this.userService).findUserById(anyLong());
         verify(this.postService).getPost(anyLong());
         verify(this.postService).savePost((Post) any());
-        verify(this.commentRepository).save((Comment) any());
-    }
-
-    @Test
-    void testUpdateComment() {
-        User user = new User();
-        user.setDeactivated(true);
-        user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
-        user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
-        user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
-        user.setPassword("iloveyou");
-        user.setPosts(new ArrayList<>());
-        user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        user.setUserId(123L);
-        when(this.userService.findUserById(anyLong())).thenReturn(user);
-
-        Post post = new Post();
-        post.setBody("Not all who wander are lost");
-        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post.setPostComments(new ArrayList<>());
-        post.setPostId(123L);
-        post.setTitle("Dr");
-        post.setUserId(123L);
-
-        Post post1 = new Post();
-        post1.setBody("Not all who wander are lost");
-        post1.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post1.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post1.setPostComments(new ArrayList<>());
-        post1.setPostId(123L);
-        post1.setTitle("Dr");
-        post1.setUserId(123L);
-        when(this.postService.savePost((Post) any())).thenReturn(post1);
-        when(this.postService.getPost(anyLong())).thenReturn(post);
-
-        Comment comment = new Comment();
-        comment.setBody("Not all who wander are lost");
-        comment.setCommentId(123L);
-        comment.setPostId(123L);
-        comment.setUserId(123L);
-        Optional<Comment> ofResult = Optional.of(comment);
-
-        Comment comment1 = new Comment();
-        comment1.setBody("Not all who wander are lost");
-        comment1.setCommentId(123L);
-        comment1.setPostId(123L);
-        comment1.setUserId(123L);
-        when(this.commentRepository.save((Comment) any())).thenReturn(comment1);
-        when(this.commentRepository.findById((Long) any())).thenReturn(ofResult);
-
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setBody("Not all who wander are lost");
-        commentDTO.setPostId(123L);
-        Comment actualUpdateCommentResult = this.commentServiceImpl.updateComment(commentDTO, 123L);
-        assertSame(comment, actualUpdateCommentResult);
-        assertEquals("Not all who wander are lost", actualUpdateCommentResult.getBody());
-        verify(this.userService).findUserById(anyLong());
-        verify(this.postService).getPost(anyLong());
-        verify(this.postService).savePost((Post) any());
-        verify(this.commentRepository).findById((Long) any());
-        verify(this.commentRepository).save((Comment) any());
-    }
-
-    @Test
-    void testUpdateComment2() {
-        User user = new User();
-        user.setDeactivated(true);
-        user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
-        user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
-        user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
-        user.setPassword("iloveyou");
-        user.setPosts(new ArrayList<>());
-        user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
-        user.setUserId(123L);
-        when(this.userService.findUserById(anyLong())).thenReturn(user);
-
-        Post post = new Post();
-        post.setBody("Not all who wander are lost");
-        post.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post.setPostComments(new ArrayList<>());
-        post.setPostId(123L);
-        post.setTitle("Dr");
-        post.setUserId(123L);
-
-        Post post1 = new Post();
-        post1.setBody("Not all who wander are lost");
-        post1.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post1.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        post1.setPostComments(new ArrayList<>());
-        post1.setPostId(123L);
-        post1.setTitle("Dr");
-        post1.setUserId(123L);
-        when(this.postService.savePost((Post) any())).thenReturn(post1);
-        when(this.postService.getPost(anyLong())).thenReturn(post);
-
-        Comment comment = new Comment();
-        comment.setBody("Not all who wander are lost");
-        comment.setCommentId(123L);
-        comment.setPostId(123L);
-        comment.setUserId(123L);
-        Optional<Comment> ofResult = Optional.of(comment);
-        when(this.commentRepository.save((Comment) any())).thenThrow(new RuntimeException("An error occurred"));
-        when(this.commentRepository.findById((Long) any())).thenReturn(ofResult);
-
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setBody("Not all who wander are lost");
-        commentDTO.setPostId(123L);
-        assertThrows(RuntimeException.class, () -> this.commentServiceImpl.updateComment(commentDTO, 123L));
-        verify(this.userService).findUserById(anyLong());
-        verify(this.postService).getPost(anyLong());
-        verify(this.postService).savePost((Post) any());
-        verify(this.commentRepository).findById((Long) any());
         verify(this.commentRepository).save((Comment) any());
     }
 
@@ -290,8 +162,8 @@ class CommentServiceImplTest {
 
     @Test
     void testGetCommentById2() {
-        when(this.commentRepository.findById((Long) any())).thenThrow(new RuntimeException("An error occurred"));
-        assertThrows(RuntimeException.class, () -> this.commentServiceImpl.getCommentById(123L));
+        when(this.commentRepository.findById((Long) any())).thenThrow(new IllegalStateException("foo"));
+        assertThrows(IllegalStateException.class, () -> this.commentServiceImpl.getCommentById(123L));
         verify(this.commentRepository).findById((Long) any());
     }
 
@@ -315,8 +187,8 @@ class CommentServiceImplTest {
     @Test
     void testGetAllCommentsOfPost2() {
         when(this.commentRepository.findCommentsByPostIdAndUserId(anyLong(), anyLong()))
-                .thenThrow(new RuntimeException("An error occurred"));
-        assertThrows(RuntimeException.class, () -> this.commentServiceImpl.getAllCommentsOfPost(123L, 123L));
+                .thenThrow(new IllegalStateException("foo"));
+        assertThrows(IllegalStateException.class, () -> this.commentServiceImpl.getAllCommentsOfPost(123L, 123L));
         verify(this.commentRepository).findCommentsByPostIdAndUserId(anyLong(), anyLong());
     }
 
@@ -329,8 +201,8 @@ class CommentServiceImplTest {
 
     @Test
     void testDeleteComment2() {
-        doThrow(new RuntimeException("An error occurred")).when(this.commentRepository).deleteById((Long) any());
-        assertThrows(RuntimeException.class, () -> this.commentServiceImpl.deleteComment(123L));
+        doThrow(new IllegalStateException("foo")).when(this.commentRepository).deleteById((Long) any());
+        assertThrows(IllegalStateException.class, () -> this.commentServiceImpl.deleteComment(123L));
         verify(this.commentRepository).deleteById((Long) any());
     }
 }

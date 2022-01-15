@@ -37,14 +37,12 @@ class UserServiceImplTest {
     @Test
     void testLoginUser() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -74,14 +72,12 @@ class UserServiceImplTest {
     @Test
     void testRegisterUser() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -89,14 +85,12 @@ class UserServiceImplTest {
         when(this.userRepository.save((User) any())).thenReturn(user);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -111,14 +105,12 @@ class UserServiceImplTest {
         when(this.userRepository.save((User) any())).thenThrow(new RuntimeException("An error occurred"));
 
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -130,14 +122,12 @@ class UserServiceImplTest {
     @Test
     void testDeactivateUser() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -146,14 +136,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(ofResult);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -168,14 +156,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenThrow(new RuntimeException("An error occurred"));
 
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -187,14 +173,12 @@ class UserServiceImplTest {
     @Test
     void testDeactivateUser3() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(false);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -202,14 +186,12 @@ class UserServiceImplTest {
         Optional<User> ofResult = Optional.of(user);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -218,14 +200,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(ofResult);
 
         User user2 = new User();
+        user2.setComments(new ArrayList<>());
         user2.setDeactivated(true);
         user2.setEmail("jane.doe@example.org");
-        user2.setFavouritePosts(new ArrayList<>());
         user2.setFirstName("Jane");
-        user2.setFollowedUsers(new ArrayList<>());
-        user2.setFollowers(new ArrayList<>());
         user2.setLastName("Doe");
-        user2.setLikedComments(new ArrayList<>());
+        user2.setLikedPosts(new ArrayList<>());
         user2.setPassword("iloveyou");
         user2.setPosts(new ArrayList<>());
         user2.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -240,14 +220,12 @@ class UserServiceImplTest {
     @Test
     void testDeactivateUser4() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(false);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -257,14 +235,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(ofResult);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -277,14 +253,12 @@ class UserServiceImplTest {
     @Test
     void testDeactivateUser5() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -293,14 +267,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(Optional.empty());
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -313,14 +285,12 @@ class UserServiceImplTest {
     @Test
     void testFindUserById() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -349,14 +319,12 @@ class UserServiceImplTest {
     @Test
     void testUpdateUser() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -364,14 +332,12 @@ class UserServiceImplTest {
         Optional<User> ofResult = Optional.of(user);
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -380,14 +346,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(ofResult);
 
         User user2 = new User();
+        user2.setComments(new ArrayList<>());
         user2.setDeactivated(true);
         user2.setEmail("jane.doe@example.org");
-        user2.setFavouritePosts(new ArrayList<>());
         user2.setFirstName("Jane");
-        user2.setFollowedUsers(new ArrayList<>());
-        user2.setFollowers(new ArrayList<>());
         user2.setLastName("Doe");
-        user2.setLikedComments(new ArrayList<>());
+        user2.setLikedPosts(new ArrayList<>());
         user2.setPassword("iloveyou");
         user2.setPosts(new ArrayList<>());
         user2.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -401,14 +365,12 @@ class UserServiceImplTest {
     @Test
     void testUpdateUser2() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -417,14 +379,12 @@ class UserServiceImplTest {
         when(this.userRepository.findById((Long) any())).thenReturn(Optional.empty());
 
         User user1 = new User();
+        user1.setComments(new ArrayList<>());
         user1.setDeactivated(true);
         user1.setEmail("jane.doe@example.org");
-        user1.setFavouritePosts(new ArrayList<>());
         user1.setFirstName("Jane");
-        user1.setFollowedUsers(new ArrayList<>());
-        user1.setFollowers(new ArrayList<>());
         user1.setLastName("Doe");
-        user1.setLikedComments(new ArrayList<>());
+        user1.setLikedPosts(new ArrayList<>());
         user1.setPassword("iloveyou");
         user1.setPosts(new ArrayList<>());
         user1.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -468,14 +428,12 @@ class UserServiceImplTest {
     @Test
     void testDeleteAllUsers3() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -495,14 +453,12 @@ class UserServiceImplTest {
     @Test
     void testDeleteAllUsers4() {
         User user = new User();
+        user.setComments(new ArrayList<>());
         user.setDeactivated(true);
         user.setEmail("jane.doe@example.org");
-        user.setFavouritePosts(new ArrayList<>());
         user.setFirstName("Jane");
-        user.setFollowedUsers(new ArrayList<>());
-        user.setFollowers(new ArrayList<>());
         user.setLastName("Doe");
-        user.setLikedComments(new ArrayList<>());
+        user.setLikedPosts(new ArrayList<>());
         user.setPassword("iloveyou");
         user.setPosts(new ArrayList<>());
         user.setRegisteredDate(LocalDateTime.of(1, 1, 1, 1, 1));

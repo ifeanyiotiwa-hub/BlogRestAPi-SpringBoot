@@ -37,19 +37,7 @@ public class PostServiceImpl implements PostService {
     public Post savePost(Post post) {
         logger.info("Save Post Triggered");
         Objects.requireNonNull(post);
-        var user = userRepository.findById(post.getUserId());
-        if (user.isPresent()) {
-            logger.info("Registered User is creating a Post");
-            var tempUser = user.get();
-            tempUser.posts.add(post);
-            postRepository.save(post);
-            userRepository.save(tempUser);
-            return post;
-        } else {
-            logger.info("Kindly Register to Create a Post");
-            throw new RuntimeException();
-        }
-
+        return postRepository.save(post);
     }
 
     @Override

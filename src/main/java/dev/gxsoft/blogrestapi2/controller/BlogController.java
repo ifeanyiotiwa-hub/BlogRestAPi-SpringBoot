@@ -92,11 +92,14 @@ public class BlogController {
         return postService.getAllPostByUserId(userId);
     }
 
-    @PostMapping("/{userId}/post")
-    public Post createPost(@PathVariable long userId, @RequestBody Post post) {
+    @PostMapping("/{userId}/post") //userId is Id of user making post
+    public Post createPost(@PathVariable long userId, @RequestBody PostDTO postDTO) {
         var user = userService.findUserById(userId);
         if (user != null){
+            var post = new Post();
             logger.info(user.toString());
+            post.setTitle(postDTO.getTitle());
+            post.setBody(postDTO.getBody());
             post.setUserId(userId);
             return postService.savePost(post);
         } else {
