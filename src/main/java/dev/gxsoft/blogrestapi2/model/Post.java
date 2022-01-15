@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long postId;
 
     private long userId;
@@ -29,9 +29,8 @@ public class Post {
 
     private LocalDateTime modifiedAt;
 
-    @OneToMany
-    @JsonBackReference
-    private List<Comment> postComments;
+    @OneToMany(cascade = CascadeType.ALL)
+    public List<Comment> postComments;
 
     public Post() {
         this.postComments = new ArrayList<>();

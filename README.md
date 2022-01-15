@@ -43,7 +43,7 @@ Request Body :
             }
 ```
 
-##To add a post in the database by a user already registered
+## To add a post in the database by a user already registered
 method: POST
 URL: http://localhost:8081/blog/api/addPost/{userid}
 
