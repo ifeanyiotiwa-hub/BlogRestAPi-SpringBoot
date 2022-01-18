@@ -10,7 +10,7 @@ and delete comment in post.
 - RequestMethod: **GET**
 - RequestURL: http://localhost:8081/blog/api/{userId}/posts/
 ---
-###To add a user in the system
+### To add a user in the system
 RequestMethod: **POST**
 URL: http://localhost:8081/blogApplication/addUser
 
@@ -57,7 +57,7 @@ URL: http://localhost:8081/blog/api/addPost/{userid}
             }
 ```
 
-** To add comment in a post
+## To add comment in a post
 method: POST
 URL: http://localhost:8081/blogApplication/posts/{id}/comment
 
