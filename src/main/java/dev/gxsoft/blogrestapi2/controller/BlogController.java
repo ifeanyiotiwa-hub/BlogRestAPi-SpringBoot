@@ -156,6 +156,8 @@ public class BlogController {
             newComment.setUserId(userId);
             newComment.setBody(comment.getBody());
             post.postComments.add(newComment);
+            var pUser = userService.findUserById(userId);
+            pUser.comments.add(newComment);
             postService.savePost(post);
             return commentService.saveComment(newComment);
         } else {
