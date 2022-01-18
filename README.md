@@ -1,4 +1,4 @@
-# **WEEK 9 BLOG REST API SpringBootApplication**
+# **BLOG REST API SpringBootApplication**
 
 This is a REST API backend application built using Java, Spring boot and Postgresql which gives functionality 
 to register user, logIn user, get all User, deactivate user, add post, delete post, update post, add comment 
